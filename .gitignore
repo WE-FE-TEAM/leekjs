@@ -11,24 +11,3 @@ node_modules
 
 npm-debug.log
 
-/api/dist
-/api/node_modules
-
-/api-doc/node_modules
-
-/wap/node_modules
-/wap/.idea
-/wap/npm-debug.log
-/wap/dist
-/wap/src/common/node_modules
-/wap/src/common/output
-/wap/src/demo/output
-
-/we-sdk/node_modules
-/we-sdk/dist
-
-we-status/node_modules/
-
-/mobile/npm-debug*
-/api/npm-debug*
-/wap/npm-debug*
