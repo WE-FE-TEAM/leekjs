@@ -235,7 +235,7 @@ class Loader {
                 let subPath = path.relative(filePath, unit.dir);
                 let name = subPath.replace(/\.js$/,'');
                 if(serviceMap.has(name)){
-                    debug(`发现同名的 service [%s] 被替换的是[%s]  优先级更高的是[%s]`, name, middlewareMap.get(name), filePath);
+                    debug(`发现同名的 service [%s] 被替换的是[%s]  优先级更高的是[%s]`, name, serviceMap.get(name), filePath);
                 }
                 serviceMap.set(name, filePath);
             });
@@ -249,8 +249,17 @@ class Loader {
         return out;
     }
 
+    /**
+     * 执行各个 unit 根目录下的 app.js ，如果存在的话
+     */
     runAppHook(){
-
+        this.loadUnit.forEach( (unit) => {
+            let files = util.findFiles(unit.dir, this.filePattern.appHook);
+            files.forEach( (filePath) => {
+                let fn = require(filePath);
+                fn(this.app);
+            });
+        });
     }
 
     /**

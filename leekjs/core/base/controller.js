@@ -5,6 +5,7 @@
 
 'use strict';
 
+const delegates = require('delegates');
 
 class Controller {
 
@@ -13,6 +14,11 @@ class Controller {
     }
 }
 
+
+delegates(Controller.prototype, 'ctx')
+    .method('getConfig')
+    .method('assign')
+    .method('request');
 
 module.exports = Controller;
 

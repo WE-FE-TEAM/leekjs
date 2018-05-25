@@ -10,6 +10,9 @@ const KoaApplication = require('koa');
 
 class LeekKoaApplication extends KoaApplication{
 
+    getConfig(module, key){
+        return leek.getConfig(module, key);
+    }
 }
 
 

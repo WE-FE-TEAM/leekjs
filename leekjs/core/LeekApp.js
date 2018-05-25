@@ -6,6 +6,9 @@
 'use strict';
 
 const path = require('path');
+const delegates = require('delegates');
+
+const leek = require('./leek.js');
 
 const LeekKoaApplication = require('./base/LeekKoaApplication');
 
@@ -15,6 +18,8 @@ const Loader = require('./Loader.js');
 class LeekApp {
 
     constructor(args){
+
+        this.leek = leek;
 
         this.frameworkRoot = path.normalize(`${__dirname}/../`);
         this.appRoot = args.appRoot;
@@ -36,10 +41,10 @@ class LeekApp {
         this.systemConfig = {};
         //app内，每个module自己的配置
         this.moduleConfig = {};
-        this.middlewareMap = {};
-        this.policyMap = {};
-        this.serviceMap = {};
-        this.moduleMap = {};
+        this.middlewareMap = new Map();
+        this.policyMap = new Map();
+        this.serviceMap = new Map();
+        this.controllerMap = new Map();
 
         this.loader = new Loader({
             frameworkRoot: this.frameworkRoot,
@@ -50,7 +55,7 @@ class LeekApp {
     }
 
     unhandledRejection(reason, p){
-        console.log('Unhandled Rejection at:', p, 'reason:', reason);
+        console.log('[unhandledRejection] at:', p, 'reason:', reason);
         this.exit(1);
     }
 
@@ -59,12 +64,42 @@ class LeekApp {
         this.exit(1);
     }
 
-    load(){
-        this.systemConfig = this.loader.loadSystemConfig();
-
+    init(){
+        this.load();
+        this._attachMiddlewareList();
+        this.run();
     }
 
-    _attachMiddleware(){}
+    load(){
+        this.systemConfig = this.loader.loadSystemConfig();
+        this.loader.loadExtend();
+        this.middlewareMap = this.loader.loadMiddleware();
+        this.moduleConfig = this.loader.loadModuleConfig();
+        this.controllerMap = this.loader.loadController();
+        this.loader.runAppHook();
+    }
+
+    _attachMiddlewareList(){
+        //先挂载 systemConfig.coreMiddleware
+        const coreMiddleware = this.systemConfig.coreMiddleware || [];
+        coreMiddleware.forEach( (conf) => {
+            const name = conf.name;
+            const options = conf.options;
+            this._useMiddleware(this.middlewareMap.get(name), options, name);
+        });
+        //挂载应用层的 systemConfig.appMiddleware
+        const appMiddleware = this.systemConfig.appMiddleware || [];
+        appMiddleware.forEach( (conf) => {
+            const name = conf.name;
+            const options = conf.options;
+            this._useMiddleware(this.middlewareMap.get(name), options, name);
+        });
+    }
+
+    _useMiddleware(middleware, options, name){
+        const fn = middleware(options, this.app);
+        this.app.use( fn );
+    }
 
     run(){
 
@@ -75,6 +110,11 @@ class LeekApp {
     }
 }
 
+
+delegates(LeekApp.prototype, 'leek')
+    .access('systemConfig')
+    .access('moduleConfig')
+    .access('serviceMap');
 
 
 module.exports = LeekApp;

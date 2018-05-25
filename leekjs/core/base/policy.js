@@ -11,6 +11,10 @@ class Policy {
     constructor(ctx){
         this.ctx = ctx;
     }
+
+    async execute(args){
+        throw new Error(`Policy必须覆盖基类的  execute 方法！`);
+    }
 }
 
 
