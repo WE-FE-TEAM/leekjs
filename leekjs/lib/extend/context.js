@@ -8,6 +8,8 @@
 const leek = global.leek;
 
 const SERVICE_MAP = Symbol('leek:context:serviceMap');
+const REWRITE_PATH = Symbol('leek:context:rewritePath');
+const REQ_PARAMS = Symbol('leek:context:reqParams');
 
 module.exports = {
 
@@ -68,5 +70,28 @@ module.exports = {
         const serviceName = arr.join('.');
         const service = this.getService(serviceName);
         return service[methodName].apply(service, args);
+    },
+
+    get rewritePath(){
+        if( ! this[REWRITE_PATH] ){
+            return this.path;
+        }
+        return this[REWRITE_PATH];
+    },
+
+    set rewritePath(path){
+        this[REWRITE_PATH] = path;
+    },
+
+    get params(){
+        if( ! this[REQ_PARAMS] ){
+            this[REQ_PARAMS] = {};
+        }
+        return this[REQ_PARAMS];
+    },
+
+    set params(val){
+        this[REQ_PARAMS] = val;
     }
+
 };
