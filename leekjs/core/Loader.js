@@ -38,10 +38,12 @@ class Loader {
                 `/lib/config/config.js`,
                 `/lib/config/config.${this.env}.js`,
             ],
+            //查找APP中的所有模块
+            module: '/module/*',
             //APP中，各个业务模块自定义的配置项，不影响APP的启动流程
             moduleConfig: [
-                `/module/*/config/config.js`,
-                `/module/*/config/config.${this.env}.js`,
+                `/config/config.js`,
+                `/config/config.${this.env}.js`,
             ],
             extend: {
                 request: `/lib/extend/request.js`,
@@ -99,6 +101,9 @@ class Loader {
 
         this.pluginDirs = this.findPluginDirList();
         debug(`启用的插件目录：`, this.pluginDirs);
+
+        this.moduleDirs = this.findModuleDirList();
+        debug(`APP中所有模块目录：`, this.moduleDirs);
         
         let loadUnit = [];
         loadUnit.push({
@@ -143,6 +148,18 @@ class Loader {
             return conf.path;
         });
 
+
+        return out;
+    }
+
+    /**
+     * 找出应用中所有的模块目录
+     * @returns {Array}
+     */
+    findModuleDirList(){
+        let out = [];
+
+        out = util.findFiles(this.appRoot, this.filePattern.module, { onlyDirectories: true });
 
         return out;
     }
@@ -268,10 +285,21 @@ class Loader {
      * @returns {*|{}}
      */
     loadModuleConfig(){
-        let files = util.findFiles(this.appRoot, this.filePattern.moduleConfig);
 
-        debug(`module config file list: `, files);
-        return util.mergeConfigFiles(files);
+        let config = {};
+        const moduleRoot = `${this.appRoot}/module`;
+        this.moduleDirs.forEach( (moduleDir) => {
+            let moduleName = moduleDir.replace(moduleRoot, '');
+            //模块名
+            moduleName = moduleName.replace(/\//g, '');
+
+            let files = util.findFiles(moduleDir, this.filePattern.moduleConfig);
+
+            debug(`module config file list for [%s]:  %O`, moduleName, files);
+            config[moduleName] = util.mergeConfigFiles(files);
+        });
+
+        return config;
     }
 
     /**
@@ -294,11 +322,6 @@ class Loader {
             let name = `${moduleName}/${controllerPath}`;
             controllerMap.set(name, require(filePath));
         });
-
-        // let out = new Map();
-        // for(let [key, val] of controllerMap){
-        //     out.set(key, require(val));
-        // }
 
         return controllerMap;
     }

@@ -28,9 +28,10 @@ let util = {
      * 查找某个目录下，满足某种GLOB模式的文件，返回所有文件列表
      * @param baseDir {string} 基础目录
      * @param pattern {Array|string} 模式数组
+     * @param options {object?} 传给 fast-glob 的配置
      * @returns {Array} 匹配的文件路径列表
      */
-    findFiles(baseDir, pattern){
+    findFiles(baseDir, pattern, options){
         let out = [];
 
         if(typeof pattern === 'string'){
@@ -41,7 +42,7 @@ let util = {
             });
         }
 
-        out = fg.sync(pattern);
+        out = fg.sync(pattern, options);
 
         return out;
     },
@@ -213,7 +214,10 @@ let util = {
             module = arr.shift();
             controllerKey = arr.join('/');
 
-            let actionPath = path.replace(`${controllerPath}/`, '');
+            let actionPath = path.replace(`${controllerPath}`, '');
+            if( actionPath[0] === '/' ){
+                actionPath = actionPath.replace(/^\/+/, '');
+            }
 
             let query = {};
 

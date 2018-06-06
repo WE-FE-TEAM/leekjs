@@ -11,8 +11,10 @@ const Controller = leek.Controller;
 class DemoController extends Controller{
 
     async testAction(){
-        const client = this.ctx.client;
+        const client = this.ctx.clientInfo;
         console.log(`client: `, client);
+        console.log(`params:`, this.ctx.params);
+        console.log(`query:`, this.ctx.query);
         this.ctx.body = 'hello leekjs';
     }
 }

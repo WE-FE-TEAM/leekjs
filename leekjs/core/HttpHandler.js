@@ -55,6 +55,8 @@ class HttpHandler{
             }
             let instance = new policyClass(ctx);
             out = await instance.execute(data);
+            //policy 中必须明确返回  false，才会阻止后续的执行
+            out = out !== false;
             if( ! out ){
                 //policy阻止了后续的执行
                 break;
