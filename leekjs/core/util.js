@@ -243,7 +243,7 @@ let util = {
                 if( fragArray.length > 1 ){
                     action = fragArray.shift();
                     //剩余的path中，作为 query 来解析： k1/v1/k2/v2
-                    for( let i = 0; i < fragArray.length; i += 2 ){
+                    for( let i = 0, len = fragArray.length - 1; i < len; i += 2 ){
                         try{
                             query[ fragArray[i] ] = decodeURIComponent( fragArray[i + 1] );
                         }catch(e){
