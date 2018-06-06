@@ -18,7 +18,8 @@ class UserController extends Controller{
         const {ctx} = this;
         ctx.body = {
             isLogin: 'unknown',
-            user: ctx.user
+            user: ctx.user,
+            query: ctx.query
         };
     }
 

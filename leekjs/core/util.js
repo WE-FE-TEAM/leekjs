@@ -5,6 +5,7 @@
 
 'use strict';
 
+const querystring = require('querystring');
 const fg = require('fast-glob');
 const _ = require('lodash');
 const debug = require('debug')('leek:util');
@@ -161,18 +162,19 @@ let util = {
 
         });
 
+        //这里先允许用户在rewrite中配置query部分吧，后面解析controller的时候，还会对query部分进行解析，并覆盖到 ctx.query 上
         //去掉rewrite之后，可能包含的query部分
-        let index = rewritePath.indexOf('?');
-        if( index >= 0 ){
-            rewritePath = rewritePath.substring(0, index);
-        }
+        // let index = rewritePath.indexOf('?');
+        // if( index >= 0 ){
+        //     rewritePath = rewritePath.substring(0, index);
+        // }
 
         //记录下rewrite之后的路径
         ctx.rewritePath = rewritePath;
 
-        if( ! ctx.params ){
-            ctx.params = {};
-        }
+        // if( ! ctx.params ){
+        //     ctx.params = {};
+        // }
         Object.assign(ctx.params, params);
 
         if( matchedRule && matchedRule.overrideQuery ){
@@ -219,6 +221,17 @@ let util = {
                 actionPath = actionPath.replace(/^\/+/, '');
             }
 
+            //去掉可能包含的 #hash
+            let hashPos = actionPath.indexOf('#');
+            if( hashPos >= 0 ){
+                actionPath = actionPath.substring(0, hashPos);
+            }
+            //去掉可能包含的 ?query
+            let queryPos = actionPath.indexOf('?');
+            if( queryPos >= 0 ){
+                actionPath = actionPath.substring(0, queryPos);
+            }
+
             let query = {};
 
             if( ! actionPath ){
@@ -226,22 +239,27 @@ let util = {
                 action = 'index';
             }else{
                 let fragArray = actionPath.split('/');
-                action = fragArray.shift();
-                //剩余的path中，作为 query 来解析： k1/v1/k2/v2
-                for( var i = 0; i < fragArray.length; i += 2 ){
-                    try{
-                        query[ fragArray[i] ] = decodeURIComponent( fragArray[i + 1] );
-                    }catch(e){
+                if( fragArray.length > 1 ){
+                    action = fragArray.shift();
+                    //剩余的path中，作为 query 来解析： k1/v1/k2/v2
+                    for( let i = 0; i < fragArray.length; i += 2 ){
+                        try{
+                            query[ fragArray[i] ] = decodeURIComponent( fragArray[i + 1] );
+                        }catch(e){
 
+                        }
                     }
+                }else{
+                    //应该直接取action，没有通过 / 分隔的参数
+                    action = actionPath;
                 }
 
             }
 
-            //path中可能还包含 ?k1=v1&k2=v2
-            let pos = actionPath.indexOf('?');
+            //经过 rewrite 之后，path中可能还包含 ?k1=v1&k2=v2
+            let pos = path.indexOf('?');
             if( pos >= 0 ){
-                Object.assign(query, querystring.parse(actionPath.substring(pos + 1)));
+                Object.assign(query, querystring.parse(path.substring(pos + 1)));
             }
 
             //覆盖 ctx.query

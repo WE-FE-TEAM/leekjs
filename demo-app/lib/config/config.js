@@ -15,6 +15,14 @@ config.static = {
     root: path.normalize(`${leek.appRoot}/static/`)
 };
 
+//rewrite
+config.rewrite = [
+    {
+        match: '/',
+        rewrite: '/home/v1/user/info?from=rewrite&test=qq'
+    }
+];
+
 
 module.exports = config;
 
