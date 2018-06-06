@@ -36,4 +36,5 @@ systemConfig.rewrite = [
 
 路由解析，负责从 `ctx.rewriteUrl` ，解析出对应的 `module/controller/action`，放在 `ctx.module` `ctx.controller` `ctx.action` 属性
 
-如果 `ctx.rewriteUrl` 不包含
+如果 `ctx.rewriteUrl` 不包含 `action` ，则默认调用 `index action`
+

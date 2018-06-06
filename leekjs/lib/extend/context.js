@@ -92,6 +92,14 @@ module.exports = {
 
     set params(val){
         this[REQ_PARAMS] = val;
+    },
+
+    async e404(){
+        this.status = 404;
+    },
+
+    async e500(){
+        this.status = 500;
     }
 
 };

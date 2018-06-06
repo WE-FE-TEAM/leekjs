@@ -6,13 +6,21 @@
 'use strict';
 
 const path = require('path');
+const querystring = require('querystring');
 const delegates = require('delegates');
+const path2reg = require('path-to-regexp');
+const _ = require('lodash');
+const mount = require('koa-mount');
 
-const leek = require('./leek.js');
+const leek = global.leek;
 
 const LeekKoaApplication = require('./base/LeekKoaApplication');
 
 const Loader = require('./Loader.js');
+
+const leekUtil = require('./util.js');
+
+const HttpHandler = require('./HttpHandler.js');
 
 
 class LeekApp {
@@ -21,15 +29,19 @@ class LeekApp {
 
         this.leek = leek;
 
-        this.frameworkRoot = path.normalize(`${__dirname}/../`);
-        this.appRoot = args.appRoot;
-        this.listenPort = args.port || process.env.port;
-        this.env = process.env.NODE_ENV;
+        leek.frameworkRoot = this.frameworkRoot = path.normalize(`${__dirname}/../`);
+        leek.appRoot = this.appRoot = args.appRoot;
+        this.listenPort = parseInt(args.port || process.env.port, 10);
+        //默认执行换成是 production
+        this.env = process.env.NODE_ENV || 'production';
         //日志的根目录
         this.logRoot = args.logRoot;
+        //访问controller的URL前缀
+        this.prefix = args.prefix || '';
 
         this.unhandledRejection = this.unhandledRejection.bind( this );
         this.uncaughtException = this.uncaughtException.bind( this );
+        this.handleHttp = this.handleHttp.bind( this );
 
         process.on('unhandledRejection', this.unhandledRejection);
         process.on('uncaughtException', this.uncaughtException);
@@ -45,6 +57,8 @@ class LeekApp {
         this.policyMap = new Map();
         this.serviceMap = new Map();
         this.controllerMap = new Map();
+
+        this.rewriteRule = [];
 
         this.loader = new Loader({
             frameworkRoot: this.frameworkRoot,
@@ -64,36 +78,61 @@ class LeekApp {
         this.exit(1);
     }
 
-    init(){
-        this.load();
-        this._attachMiddlewareList();
-        this.run();
-    }
-
     load(){
         this.systemConfig = this.loader.loadSystemConfig();
+        this.initRewriteRule();
         this.loader.loadExtend();
         this.middlewareMap = this.loader.loadMiddleware();
+        this.policyMap = this.loader.loadPolicy();
         this.moduleConfig = this.loader.loadModuleConfig();
         this.controllerMap = this.loader.loadController();
         this.loader.runAppHook();
     }
 
+    initRewriteRule(){
+        const rewrite = this.systemConfig['rewrite'] || [];
+        const rules = rewrite.map( (obj) => {
+            const out = {
+                rewrite: obj.rewrite
+            };
+            const keys = [];
+            const reg = path2reg(obj.match, keys);
+            out.match = reg;
+            out.keys = keys;
+            //原始的match配置，是string类型的
+            out.isStringMatch = _.isString(obj.rewrite);
+            out.overrideQuery = obj.overrideQuery !== false;
+
+            return out;
+        });
+
+        this.rewriteRule = rules;
+    }
+
     _attachMiddlewareList(){
+
+        const arr =  (this.systemConfig.coreMiddleware || []).concat( this.systemConfig.appMiddleware || []);
+
         //先挂载 systemConfig.coreMiddleware
-        const coreMiddleware = this.systemConfig.coreMiddleware || [];
-        coreMiddleware.forEach( (conf) => {
-            const name = conf.name;
+        //然后挂载应用层的 systemConfig.appMiddleware
+        arr.forEach( (conf) => {
+            const name = conf.package || conf.name;
             const options = conf.options;
-            this._useMiddleware(this.middlewareMap.get(name), options, name);
+            //package 表明是从 node_modules 加载中间件
+            let file = conf.package;
+            if( ! file ){
+                file = this.middlewareMap.get(name);
+            }
+            const fn = require( file );
+            this._useMiddleware(fn, options, name);
         });
-        //挂载应用层的 systemConfig.appMiddleware
-        const appMiddleware = this.systemConfig.appMiddleware || [];
-        appMiddleware.forEach( (conf) => {
-            const name = conf.name;
-            const options = conf.options;
-            this._useMiddleware(this.middlewareMap.get(name), options, name);
-        });
+
+        //最后自动挂载controller入口
+        let finalMiddleware = this.handleHttp;
+        if( this.prefix ){
+            finalMiddleware = mount(this.prefix, this.handleHttp);
+        }
+        this.app.use( finalMiddleware );
     }
 
     _useMiddleware(middleware, options, name){
@@ -101,8 +140,47 @@ class LeekApp {
         this.app.use( fn );
     }
 
-    run(){
+    /**
+     * 作为middleware链中的最后一个，负责解析具体的 module、controller、action，并启动执行
+     * @param ctx {Context}
+     * @param next {function}
+     * @returns {Promise.<void>}
+     */
+    async handleHttp(ctx, next){
 
+        //使用 koa-mount 之后，已经自动去掉了前缀
+        //去掉prefix
+        // if( this.prefix ){
+        //     let rewritePath = ctx.rewritePath;
+        //     if( rewritePath.indexOf(this.prefix) === 0 ){
+        //         ctx.rewritePath = rewritePath.replace(this.prefix, '');
+        //     }
+        // }
+
+        const matchedRule = leekUtil.matchRule(ctx, this.rewriteRule);
+        const out = leekUtil.parseController(ctx, this.controllerMap);
+        if( ! out.module ){
+            //404请求
+            return await ctx.e404();
+        }
+
+        ctx.module = out.module;
+        ctx.controller = out.controller;
+        ctx.controllerClass = out.controllerClass;
+        ctx.action = out.action;
+
+        let httpHandler = new HttpHandler(ctx);
+        try{
+            await httpHandler.run();
+        }catch(e){
+            await ctx.e500(e);
+        }
+    }
+
+    run(){
+        this.load();
+        this._attachMiddlewareList();
+        this.app.listen(this.listenPort);
     }
 
     exit(code = 0){
@@ -114,7 +192,9 @@ class LeekApp {
 delegates(LeekApp.prototype, 'leek')
     .access('systemConfig')
     .access('moduleConfig')
-    .access('serviceMap');
+    .access('policyMap')
+    .access('serviceMap')
+    .access('controllerMap');
 
 
 module.exports = LeekApp;

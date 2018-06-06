@@ -124,7 +124,7 @@ class Loader {
      * 根据当前执行环境，得到需要加载的所有插件目录列表
      * @returns {Array}
      */
-    async findPluginDirList(){
+    findPluginDirList(){
         let out = [];
 
         let frameworkPluginConfFiles = util.findFiles(this.frameworkRoot, this.filePattern.plugin);
@@ -168,7 +168,7 @@ class Loader {
     }
 
     loadExtendByName(extendName, proto){
-        const pattern = this.filePattern[extendName];
+        const pattern = this.filePattern.extend[extendName];
         this.loadUnit.forEach( (unit) => {
             let files = util.findFiles(unit.dir, pattern);
             util.mergePrototype(proto, files, extendName, this.app);
@@ -286,21 +286,21 @@ class Loader {
         let files = util.findFiles(this.appRoot, this.filePattern.definition.controller);
         files.forEach((filePath) => {
             // 文件相对于 /module 的路径和文件名，一起作为名字
-            let subPath = path.relative(filePath, this.appRoot);
-            let reg = /module\/([^\/]+)\/controller\/(.+)\.js$/;
+            let subPath = path.relative(this.appRoot, filePath);
+            let reg = /^module\/([^\/]+)\/controller\/(.+)\.js$/;
             let temp = reg.exec(subPath);
             let moduleName = temp[1];
             let controllerPath = temp[2];
             let name = `${moduleName}/${controllerPath}`;
-            controllerMap.set(name, filePath);
+            controllerMap.set(name, require(filePath));
         });
 
-        let out = new Map();
-        for(let [key, val] of controllerMap){
-            out.set(key, require(val));
-        }
+        // let out = new Map();
+        // for(let [key, val] of controllerMap){
+        //     out.set(key, require(val));
+        // }
 
-        return out;
+        return controllerMap;
     }
 
 }

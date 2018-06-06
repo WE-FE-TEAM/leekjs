@@ -7,6 +7,8 @@
 
 'use strict';
 
+const querystring = require('querystring');
+const debug = require('debug')('leek:router');
 const _ = require('lodash');
 const path2reg = require('path-to-regexp');
 
@@ -74,6 +76,13 @@ function matchRule(ctx, rules){
 }
 
 
+/**
+ * 根据当前请求的 rewritePath，找出对应的 module、controller、action。
+ * 如果 rewritePath 中包含多余的路径和query，都会合并到 ctx.query 中
+ * @param ctx {Context}
+ * @param controllerMap {Map} controller map
+ * @returns {{module: *, controllerClass: *, action: *}}
+ */
 function parseController(ctx, controllerMap){
 
     let module = null;
@@ -97,6 +106,9 @@ function parseController(ctx, controllerMap){
         let arr = controllerPath.split('/');
         module = arr.shift();
         let actionPath = path.replace(`${controllerPath}/`, '');
+
+        let query = {};
+
         if( ! actionPath ){
             //默认的action
             action = 'index';
@@ -104,7 +116,6 @@ function parseController(ctx, controllerMap){
             let fragArray = actionPath.split('/');
             action = fragArray.shift();
             //剩余的path中，作为 query 来解析： k1/v1/k2/v2
-            let query = ctx.query;
             for( var i = 0; i < fragArray.length; i += 2 ){
                 try{
                     query[ fragArray[i] ] = decodeURIComponent( fragArray[i + 1] );
@@ -112,7 +123,17 @@ function parseController(ctx, controllerMap){
 
                 }
             }
+
         }
+
+        //path中可能还包含 ?k1=v1&k2=v2
+        let pos = actionPath.indexOf('?');
+        if( pos >= 0 ){
+            Object.assign(query, querystring.parse(actionPath.substring(pos + 1)));
+        }
+
+        //覆盖 ctx.query
+        Object.assign(ctx.query, query);
     }
 
 
@@ -146,7 +167,12 @@ module.exports = function(options, app){
     });
 
     return async function router(ctx, next){
-
+        const matchedRule = matchRule(ctx, rules);
+        const out = parseController(ctx, leek.controllerMap);
+        if( ! out.module ){
+            //404请求
+            return await ctx.e404();
+        }
     }
 };
 
