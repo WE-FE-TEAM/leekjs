@@ -14,7 +14,8 @@ class PassportIndexController extends Controller{
             text: 'hello world. 来自 passport.index.hello',
             params: this.ctx.params,
             query: this.ctx.query,
-            state: this.ctx.state
+            state: this.ctx.state,
+            user: this.ctx.user
         };
     }
 
