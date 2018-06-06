@@ -20,6 +20,14 @@ config.rewrite = [
     {
         match: '/',
         rewrite: '/home/v1/user/info?from=rewrite&test=qq'
+    },
+    {
+        match: '/p/:name/:age',
+        rewrite: '/passport/index/hello'
+    },
+    {
+        match: /^\/p2\/([^\/]+)\/([^\/]+)/,
+        rewrite: '/passport/index/state?q1=$1&q2=$2'
     }
 ];
 

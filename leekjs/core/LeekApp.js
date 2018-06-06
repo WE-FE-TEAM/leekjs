@@ -100,7 +100,7 @@ class LeekApp {
             out.match = reg;
             out.keys = keys;
             //原始的match配置，是string类型的
-            out.isStringMatch = _.isString(obj.rewrite);
+            out.isStringMatch = _.isString(obj.match);
             out.overrideQuery = obj.overrideQuery !== false;
 
             return out;

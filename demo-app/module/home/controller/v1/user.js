@@ -19,7 +19,8 @@ class UserController extends Controller{
         ctx.body = {
             isLogin: 'unknown',
             user: ctx.user,
-            query: ctx.query
+            query: ctx.query,
+            params: ctx.params
         };
     }
 

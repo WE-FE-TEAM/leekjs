@@ -123,6 +123,7 @@ let util = {
 
     /**
      * 遍历 rewrite 数组，根据匹配到的规则，对URL进行重写
+     * 主要参考 thinkjs 的实现： https://github.com/thinkjs/think-router/blob/master/router.js
      * @param ctx {Context}
      * @param rules {Array} rewrite 数组
      * @returns {*}
@@ -151,7 +152,7 @@ let util = {
                 }else{
                     //原始配置的是正则
                     const keyIndex = parseInt(name, 10) + 1;
-                    rewritePath = rewritePath.replace(new RegExp(`\\$${index}`, 'g'), out[keyIndex] || '');
+                    rewritePath = rewritePath.replace(new RegExp(`\\$${keyIndex}`, 'g'), out[keyIndex] || '');
                 }
 
             });
@@ -200,7 +201,12 @@ let util = {
         let action = null;
         let controllerPath = null;
 
-        const path = (ctx.rewritePath || '').replace(/^\/+/, '');
+        let path = (ctx.rewritePath || '').replace(/^\/+/, '');
+        //去掉可能包含的 #hash
+        let hashPos = path.indexOf('#');
+        if( hashPos >= 0 ){
+            path = path.substring(0, hashPos);
+        }
 
         for(let name of controllerMap.keys() ){
             if( name === path || path.indexOf(`${name}/`) === 0 ){
@@ -221,11 +227,6 @@ let util = {
                 actionPath = actionPath.replace(/^\/+/, '');
             }
 
-            //去掉可能包含的 #hash
-            let hashPos = actionPath.indexOf('#');
-            if( hashPos >= 0 ){
-                actionPath = actionPath.substring(0, hashPos);
-            }
             //去掉可能包含的 ?query
             let queryPos = actionPath.indexOf('?');
             if( queryPos >= 0 ){

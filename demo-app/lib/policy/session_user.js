@@ -23,6 +23,7 @@ class SessionPolicy extends Policy{
         });
 
         this.ctx.user = user;
+        this.ctx.params.through = 'session_user';
     }
 }
 
