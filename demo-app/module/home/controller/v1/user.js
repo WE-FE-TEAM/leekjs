@@ -29,6 +29,7 @@ class UserController extends Controller{
             hello: 'policy',
             noUser: this.ctx.user
         };
+        await this.render('path/to/tpl', {});
     }
 }
 

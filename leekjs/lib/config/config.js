@@ -7,14 +7,36 @@
 
 const config = {};
 
-config.coreMiddleware = [
+//要加载的middleware列表
+config.middleware = [
     {
-        name: 'leek_static',
+        name: 'leek_meta',
+        options: {
+
+        }
     },
     {
-        package: 'koa-bodyparser'
+        name: 'leek_static',
+        options: {
+
+        }
+    },
+    {
+        package: 'koa-bodyparser',
+        options: {
+
+        }
     }
 ];
+
+//各个middleware对应的配置
+config.middlewareOption = {
+
+    'leek_meta': {
+        'x-powered-by': 'leek-v1',
+        responseTimeHeader: 'x-res-time'
+    }
+};
 
 //默认的日志
 config.log = {
@@ -34,5 +56,8 @@ config.contextLog = {
     //如果请求中不包含上述header，是否自动生成一个
     generateReqId: true
 };
+
+//url驼峰转下划线、中划线
+// config.url
 
 module.exports = config;

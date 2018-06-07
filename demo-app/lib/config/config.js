@@ -7,12 +7,32 @@
 
 const path = require('path');
 
-const config = {};
+const config = {
 
-//静态文件相关配置
-config.static = {
-    '$mountPath': '/ds',
-    root: path.normalize(`${leek.appRoot}/static/`)
+};
+
+//覆盖框架默认的中间件列表
+config.middleware = [
+    {
+        name: 'leek_meta',
+    },
+    {
+        name: 'leek_static',
+    },
+    {
+        package: 'koa-bodyparser',
+        options: {
+
+        }
+    }
+];
+
+//覆盖默认的中间件配置
+config.middlewareOption = {
+    leek_static: {
+        '$mountPath': '/ds',
+        root: path.normalize(`${leek.appRoot}/static/`)
+    }
 };
 
 //rewrite
@@ -31,12 +51,6 @@ config.rewrite = [
     }
 ];
 
-//应用自己额外加的middleware
-config.appMiddleware = [
-    // {
-    //     package: 'koa-etag'
-    // }
-];
 
 
 module.exports = config;

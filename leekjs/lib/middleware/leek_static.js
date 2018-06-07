@@ -14,7 +14,7 @@ const serve = require('koa-static');
 
 module.exports = function(options, app){
 
-    const staticConfig = leek.getConfig('static') || {};
+    const staticConfig = options || {};
     const urlPrefix = staticConfig['$mountPath'] || '/';
 
     return mount(urlPrefix, serve(staticConfig.root, staticConfig));

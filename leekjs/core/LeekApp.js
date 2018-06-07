@@ -114,13 +114,14 @@ class LeekApp {
 
     _attachMiddlewareList(){
 
-        const arr =  (this.systemConfig.coreMiddleware || []).concat( this.systemConfig.appMiddleware || []);
+        const arr =  this.systemConfig.middleware || [];
+        const middlewareOption = this.systemConfig.middlewareOption || {};
 
         //先挂载 systemConfig.coreMiddleware
         //然后挂载应用层的 systemConfig.appMiddleware
         arr.forEach( (conf) => {
             const name = conf.package || conf.name;
-            const options = conf.options;
+            const options = leekUtil.deepMergeObject(conf.options || {}, middlewareOption[name]);
             //package 表明是从 node_modules 加载中间件
             let file = conf.package;
             if( ! file ){

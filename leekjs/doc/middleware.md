@@ -3,7 +3,7 @@
 框架支持 `koa@v2` 格式的 `middleware`，也允许用户在 `lib/middleware/` 目录，提供自己的中间件。
 
 
-## systemConfig.coreMiddleware
+## systemConfig.middleware
 
 系统默认的核心middleware，包括
 
