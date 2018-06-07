@@ -16,6 +16,7 @@ class Controller {
 
 
 delegates(Controller.prototype, 'ctx')
+    .getter('log')
     .method('getConfig')
     .method('assign')
     .method('request');

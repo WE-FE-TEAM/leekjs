@@ -5,16 +5,24 @@
 
 'use strict';
 
+const delegates = require('delegates');
+const uuid = require('uuid');
+
 const leek = global.leek;
 
 const SERVICE_MAP = Symbol('leek:context:serviceMap');
 const REWRITE_PATH = Symbol('leek:context:rewritePath');
 const REQ_PARAMS = Symbol('leek:context:reqParams');
+const CONTEXT_LOG = Symbol('leek:context:log');
+const CONTEXT_REQ_ID = Symbol('leek:context:reqId');
 
-module.exports = {
+//读取请求惟一ID的header字段
+const contextLogConfig = leek.getConfig('contextLog');
 
-    getConfig(module, key){
-        return leek.getConfig(module, key);
+const proto = {
+
+    getConfig(key, module){
+        return leek.getConfig( key, module);
     },
 
     /**
@@ -100,6 +108,45 @@ module.exports = {
 
     async e500(){
         this.status = 500;
+    },
+
+    get log(){
+        if( ! this[CONTEXT_LOG] ){
+
+            let conf = {
+                original_url: this.originalUrl
+            };
+
+            if( this.reqId ){
+                conf.req_id = this.reqId;
+            }
+
+            this[CONTEXT_LOG] = this.app.log.child(conf);
+        }
+        return this[CONTEXT_LOG];
+    },
+
+    get reqId(){
+        if( ! this.hasOwnProperty(CONTEXT_REQ_ID) ){
+            let reqId = this.header[contextLogConfig.reqIdHeader];
+            if( ! reqId && contextLogConfig.generateReqId ){
+                reqId = uuid.v4();
+            }
+            if( reqId ){
+                this.set(contextLogConfig.reqIdHeader, reqId);
+            }
+            this[CONTEXT_REQ_ID] = reqId;
+        }
+        return this[CONTEXT_REQ_ID];
     }
 
 };
+
+
+// delegates(proto, 'request')
+//     .getter('originalUrl');
+
+
+module.exports = proto;
+
+

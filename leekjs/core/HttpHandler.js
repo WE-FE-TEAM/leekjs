@@ -85,7 +85,7 @@ class HttpHandler{
         const ctx = this.ctx;
         let out = [];
 
-        const moduleConf = leek.getConfig(ctx.module, 'policy');
+        const moduleConf = leek.getConfig('policy', ctx.module);
         if( moduleConf ){
             out = moduleConf['*'] || [];
             const controllerConf = moduleConf[ctx.controller];

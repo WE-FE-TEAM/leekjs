@@ -26,6 +26,19 @@ function mergeHandle(objValue, srcValue){
 let util = {
 
     /**
+     * 深度拷贝merge，
+     * 如果同名的value是object，则递归merge
+     * 如果是其他类型，则直接覆盖
+     * @param to {object} 要覆盖的对象
+     * @param from {object} 读取的对象
+     * @returns {object} merge之后的对象，也就是 out
+     */
+    deepMergeObject(to, from){
+        _.mergeWith(to, from, mergeHandle);
+        return to;
+    },
+
+    /**
      * 查找某个目录下，满足某种GLOB模式的文件，返回所有文件列表
      * @param baseDir {string} 基础目录
      * @param pattern {Array|string} 模式数组

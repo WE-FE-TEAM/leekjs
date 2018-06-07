@@ -80,6 +80,9 @@ class LeekApp {
 
     load(){
         this.systemConfig = this.loader.loadSystemConfig();
+        //初始化log对象
+        const log = this.app.log;
+
         this.initRewriteRule();
         this.loader.loadExtend();
         this.middlewareMap = this.loader.loadMiddleware();

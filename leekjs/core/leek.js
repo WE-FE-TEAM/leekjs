@@ -13,20 +13,19 @@ const leek = {
     serviceMap: new Map(),
 
     /**
-     * 只传一个参数，当时是key，读取 systemConfig。
-     * 传2个参数时，读取 moduleConfig
+     * 只传key，读取 systemConfig。
+     * 传key和module 2个参数时，读取 moduleConfig
      * @param module {string}
      * @param key {string}
      * @returns {*}
      */
-    getConfig(module, key){
+    getConfig(key, module){
         let conf = this.systemConfig;
-        if( arguments.length === 2 ){
+        if( module ){
             conf = this.moduleConfig;
             conf = conf[module] || {};
-        }else{
-            key = module;
         }
+
         return conf[key];
     },
 

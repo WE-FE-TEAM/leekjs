@@ -5,6 +5,7 @@
 
 'use strict';
 
+const delegates = require('delegates');
 
 class Service {
 

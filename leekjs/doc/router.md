@@ -38,3 +38,8 @@ systemConfig.rewrite = [
 
 如果 `ctx.rewriteUrl` 不包含 `action` ，则默认调用 `index action`
 
+
+
+## 相关依赖
+
+* https://github.com/pillarjs/path-to-regexp
