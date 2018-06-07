@@ -20,6 +20,8 @@ class PassportIndexController extends Controller{
     }
 
     async stateAction(){
+        this.log.error(`出错啦`);
+        this.log.info(`测试打日志功能[%s]`, 'hello');
         this.ctx.body = {
             status: 0,
             message: 'ok',
@@ -29,6 +31,7 @@ class PassportIndexController extends Controller{
                 state: this.ctx.state
             }
         };
+        this.log.warn('测试log里传JSON怎么样 %O', this.ctx.query);
     }
 }
 

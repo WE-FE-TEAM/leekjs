@@ -31,6 +31,13 @@ config.rewrite = [
     }
 ];
 
+//应用自己额外加的middleware
+config.appMiddleware = [
+    // {
+    //     package: 'koa-etag'
+    // }
+];
+
 
 module.exports = config;
 
