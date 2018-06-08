@@ -57,7 +57,10 @@ config.contextLog = {
     generateReqId: true
 };
 
-//url驼峰转下划线、中划线
-// config.url
+//url驼峰转下划线、中划线。允许配置 下划线(_)、中划线(-)。会将controller action名字转换成对应的 snake  kebab 格式
+config.urlBeautify = {
+    controller: '_',
+    action: '_'
+};
 
 module.exports = config;

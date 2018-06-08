@@ -64,7 +64,8 @@ class LeekApp {
             frameworkRoot: this.frameworkRoot,
             appRoot: this.appRoot,
             env: this.env,
-            app: this.app
+            app: this.app,
+            leekApp: this
         });
     }
 

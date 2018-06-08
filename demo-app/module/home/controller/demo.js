@@ -17,6 +17,17 @@ class DemoController extends Controller{
         console.log(`query:`, this.ctx.query);
         this.ctx.body = 'hello leekjs';
     }
+
+    async isUserPageShowedAction(){
+        this.ctx.body = {
+            status: 0,
+            message: '测试URL美化',
+            data: {
+                query: this.ctx.query,
+                params: this.ctx.params
+            }
+        };
+    }
 }
 
 

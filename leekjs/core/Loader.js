@@ -27,6 +27,7 @@ class Loader {
         this.appRoot = args.appRoot;
         this.env = args.env;
         this.app = args.app;
+        this.leekApp = args.leekApp;
 
         this.filePattern = {
             plugin: [
@@ -311,6 +312,14 @@ class Loader {
     loadController(){
         let controllerMap = new Map();
 
+        const urlBeautify = leek.getConfig('urlBeautify') || {};
+        const controllerBeautify = urlBeautify.controller;
+        let urlFn = null;
+        if( controllerBeautify === '_' || controllerBeautify === '-'){
+            //配置了controller URL美化
+            urlFn = controllerBeautify === '_' ? _.snakeCase : _.kebabCase;
+        }
+
         let files = util.findFiles(this.appRoot, this.filePattern.definition.controller);
         files.forEach((filePath) => {
             // 文件相对于 /module 的路径和文件名，一起作为名字
@@ -320,6 +329,14 @@ class Loader {
             let moduleName = temp[1];
             let controllerPath = temp[2];
             let name = `${moduleName}/${controllerPath}`;
+            if( urlFn ){
+                //配置了URL美化
+                let arr = name.split('/');
+                arr = arr.map( (fragment) => {
+                    return urlFn(fragment);
+                });
+                name = arr.join('/');
+            }
             controllerMap.set(name, require(filePath));
         });
 

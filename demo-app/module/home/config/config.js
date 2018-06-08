@@ -11,7 +11,10 @@ module.exports = {
     policy: {
         '*': [ { name: 'session_user', data: { k1: 'v1', a: 444} } ],
         'v1/user': {
-            test2: []
+            test2: [],
+        },
+        demo: {
+            isUserPageShowed: []
         }
     }
 };

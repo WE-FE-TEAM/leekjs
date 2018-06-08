@@ -280,6 +280,14 @@ let util = {
             Object.assign(ctx.query, query);
         }
 
+        if( action ){
+            const urlBeautify = leek.getConfig('urlBeautify') || {};
+            if( urlBeautify.action ){
+                //用户配置了action URL美化，需要把 action 转换成 camelCase 格式的
+                action = _.camelCase(action);
+            }
+        }
+
 
         return {
             module: module,
