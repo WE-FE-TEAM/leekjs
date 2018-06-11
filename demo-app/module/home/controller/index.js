@@ -9,7 +9,13 @@ class IndexController extends leek.Controller{
 
     async helloAction(){
 
-        await this.ctx.render('home/page/index/index.nj');
+        await this.ctx.render('home/page/index/index.nj', {
+            name: 'jessTest-hehe'
+        });
+    }
+
+    async testErrorAction(){
+        await this.ctx.render('fsda/fdaf');
     }
 }
 

@@ -106,7 +106,8 @@ const proto = {
         this.status = 404;
     },
 
-    async e500(){
+    async e500(err){
+        this.log.error(err);
         this.status = 500;
     },
 

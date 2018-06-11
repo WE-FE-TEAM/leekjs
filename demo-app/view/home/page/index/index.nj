@@ -2,3 +2,11 @@
 <h1>
     hello, nunjucks for leekjs
 </h1>
+
+<div>
+    <span style="color: red;"><$ name | rrdUpper $></span>
+</div>
+
+<p>add some more with noCache true</p>
+
+<p>继续测试 noCache false</p>

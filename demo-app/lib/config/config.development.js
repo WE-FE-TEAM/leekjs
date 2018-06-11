@@ -28,6 +28,16 @@ config.log = {
     ]
 };
 
+config.view = {
+
+    engineOptions: {
+
+        nunjucks: {
+            noCache: true
+        }
+    }
+};
+
 module.exports = config;
 
 

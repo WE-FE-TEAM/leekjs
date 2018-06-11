@@ -61,7 +61,8 @@ config.view = {
             name: 'nunjucks',
             engine: require('leek-view-nunjucks'),
             options: {
-                rootDir: path.normalize(`${leek.appRoot}/view`)
+                rootDir: path.normalize(`${leek.appRoot}/view`),
+                customFunction: require('../../core/view/nunjucks.js'),
             }
         }
     ]
