@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "koa-etag": "^3.0.0",
-    "leekjs": "file:../leekjs"
+    "leek-view-nunjucks": "^1.0.1",
+    "leek-views": "file:../leek-plugins/leek-views",
+    "leekjs": "0.0.4"
   }
 }

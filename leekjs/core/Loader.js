@@ -65,7 +65,7 @@ class Loader {
                 controller: `/module/*/controller/**/*.js`,
             },
             //作为在应用启动前，提前调用各个unit下的app.js，方便应用在启动前，做一些自定义操作
-            appHook: `app.js`
+            appHook: `/app.js`
         };
 
         //需要扩展的对象
@@ -144,7 +144,7 @@ class Loader {
 
         out = out.map( (conf) => {
             if( conf.package ){
-                return require.resolve(conf.package);
+                return path.dirname( require.resolve(conf.package) );
             }
             return conf.path;
         });

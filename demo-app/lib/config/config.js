@@ -51,6 +51,21 @@ config.rewrite = [
     }
 ];
 
+//模板相关配置
+config.view = {
+
+    defaultExtension: '.nj',
+
+    engines: [
+        {
+            name: 'nunjucks',
+            engine: require('leek-view-nunjucks'),
+            options: {
+                rootDir: path.normalize(`${leek.appRoot}/view`)
+            }
+        }
+    ]
+};
 
 
 module.exports = config;
