@@ -8,6 +8,7 @@
 
 module.exports = (env) => {
 
+    env.addGlobal('Date', Date);
 
     env.addFilter('rrdUpper', function(str){
         str = str || '';

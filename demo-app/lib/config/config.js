@@ -65,7 +65,22 @@ config.view = {
                 customFunction: require('../../core/view/nunjucks.js'),
             }
         }
-    ]
+    ],
+
+    engineOptions: {
+
+        nunjucks: {
+
+            tags: {
+                blockStart: '{%',
+                blockEnd: '%}',
+                variableStart: '{{',
+                variableEnd: '}}',
+                commentStart: '{#',
+                commentEnd: '#}'
+            }
+        }
+    }
 };
 
 

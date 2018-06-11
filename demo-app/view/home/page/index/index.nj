@@ -1,12 +1,23 @@
+{% extends 'common/page/layout.nj' %}
+
+{% block block_body %}
 
 <h1>
     hello, nunjucks for leekjs
 </h1>
 
 <div>
-    <span style="color: red;"><$ name | rrdUpper $></span>
+    <span style="color: red;">{{ user.name | rrdUpper }}</span>
 </div>
+
+<div> user.age: {{ user.age }}</div>
 
 <p>add some more with noCache true</p>
 
 <p>继续测试 noCache false</p>
+
+{# 这里是注释 #}
+
+<div class="" data-value="{{ user.money.bigger }}">test attribute variable</div>
+
+{% endblock %}

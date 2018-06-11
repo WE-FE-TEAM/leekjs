@@ -19,7 +19,7 @@ class SessionPolicy extends Policy{
                     age: 19,
                     school: 'nwpu'
                 });
-            }, 1000);
+            }, 10);
         });
 
         this.ctx.user = user;
