@@ -26,7 +26,14 @@ class LeekViewNunjucks{
     }
 
     async render(tplName, data){
-        return this.env.render(tplName, data);
+        return new Promise((resolve, reject) => {
+            this.env.render(tplName, data, (err, result) => {
+                if( err ){
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
     }
 }
 

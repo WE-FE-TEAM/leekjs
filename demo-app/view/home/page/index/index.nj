@@ -20,4 +20,6 @@
 
 <div class="" data-value="{{ user.money.bigger }}">test attribute variable</div>
 
+======
+
 {% endblock %}

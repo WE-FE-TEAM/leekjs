@@ -13,7 +13,8 @@
     window._jHeadStart = ( new Date() ).getTime();
     window.tplConf = {
         user : {
-            userId : '{{user.userId | raw | default("null") }}'
+            userId : '{{user.userId | safe | default("null", true) }}',
+            now: '{{ tpl_now }}'
         },
         pageKey : '',
         autoPV : true,
