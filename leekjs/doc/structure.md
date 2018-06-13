@@ -14,7 +14,6 @@ demo-app
 │   │   ├── config.js
 │   │   ├── plugin.development.js
 │   │   └── plugin.js
-│   ├── controller
 │   ├── extend
 │   ├── middleware
 │   ├── policy
