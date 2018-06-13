@@ -29,12 +29,12 @@ module.exports = {
                 noCache: false,
                 // 参考配置 http://mozilla.github.io/nunjucks/api.html#customizing-syntax
                 tags: {
-                    blockStart: '<%',
-                    blockEnd: '%>',
-                    variableStart: '<$',
-                    variableEnd: '$>',
-                    commentStart: '<#',
-                    commentEnd: '#>'
+                    blockStart: '{%',
+                    blockEnd: '%}',
+                    variableStart: '{{',
+                    variableEnd: '}}',
+                    commentStart: '{#',
+                    commentEnd: '#}'
                 }
             }
         },
