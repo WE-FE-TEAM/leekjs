@@ -83,6 +83,23 @@ config.view = {
     }
 };
 
+//后端服务的配置
+config.backend = {
+
+    //用户服务
+    user: {
+        host: 'image.baidu.com',
+        port: 80
+    },
+
+    //账户
+    account: {
+        host: 'www.google.com',
+        port: 443
+    }
+
+};
+
 
 module.exports = config;
 

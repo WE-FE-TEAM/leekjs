@@ -251,7 +251,7 @@ class Loader {
             files.forEach((filePath) => {
                 // 文件相对于 /lib/service 的路径和文件名，一起作为名字
                 let subPath = path.relative( unit.dir, filePath);
-                let name = subPath.replace(/\.js$/,'').replace(/^lib\/service\//, '');
+                let name = subPath.replace(/\.js$/,'').replace(/^lib\/service\//, '').replace(/\//g, '.');
                 if(serviceMap.has(name)){
                     debug(`发现同名的 service [%s] 被替换的是[%s]  优先级更高的是[%s]`, name, serviceMap.get(name), filePath);
                 }
