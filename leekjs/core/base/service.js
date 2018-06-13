@@ -15,5 +15,13 @@ class Service {
 }
 
 
+delegates(Service.prototype, 'ctx')
+    .getter('log')
+    .method('getConfig')
+    .method('assign')
+    .method('callService')
+    .method('curl');
+
+
 module.exports = Service;
 

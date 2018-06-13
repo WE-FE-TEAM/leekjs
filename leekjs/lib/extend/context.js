@@ -72,7 +72,7 @@ const proto = {
      * @param args {Array} 参数
      * @returns {Promise.<*>}
      */
-    async request(serviceMethod, ...args){
+    async callService(serviceMethod, ...args){
         const arr = serviceMethod.split('.');
         const methodName = arr.pop();
         const serviceName = arr.join('.');
@@ -144,8 +144,8 @@ const proto = {
 };
 
 
-// delegates(proto, 'request')
-//     .getter('originalUrl');
+delegates(proto, 'app')
+    .method('curl');
 
 
 module.exports = proto;

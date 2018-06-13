@@ -19,5 +19,13 @@ class Policy {
 }
 
 
+delegates(Policy.prototype, 'ctx')
+    .getter('log')
+    .method('getConfig')
+    .method('assign')
+    .method('callService')
+    .method('curl');
+
+
 module.exports = Policy;
 

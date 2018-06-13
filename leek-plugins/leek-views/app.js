@@ -8,6 +8,7 @@
 
 const ViewManager = require('./core/ViewManager.js');
 
+//这里的  app，是   KoaApplication 对象
 module.exports = function(app){
 
     const config = app.getConfig('view');

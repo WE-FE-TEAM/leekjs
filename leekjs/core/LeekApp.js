@@ -87,6 +87,7 @@ class LeekApp {
         this.initRewriteRule();
         this.loader.loadExtend();
         this.middlewareMap = this.loader.loadMiddleware();
+        this.serviceMap = this.loader.loadService();
         this.policyMap = this.loader.loadPolicy();
         this.moduleConfig = this.loader.loadModuleConfig();
         this.controllerMap = this.loader.loadController();
