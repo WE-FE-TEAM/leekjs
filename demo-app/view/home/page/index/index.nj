@@ -1,5 +1,7 @@
 {% extends 'common/page/layout.nj' %}
 
+{% set tpl_now = Date.now() %}
+
 {% block block_body %}
 
 <h1>
@@ -21,5 +23,10 @@
 <div class="" data-value="{{ user.money.bigger }}">test attribute variable</div>
 
 ======
+
+{{ Date.now() }}
+
+{% set test_now = Date.now() %}
+<div style="color: #0f0;">{{ test_now }}</div>
 
 {% endblock %}

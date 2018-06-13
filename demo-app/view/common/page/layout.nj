@@ -1,9 +1,6 @@
 <!doctype html>
 {% block block_assign %}
-{# 模板内赋值局部变量 #}
-{% set tpl_now = Date.now() %}
-{# 当前选中的二级导航栏 #}
-{% set tpl_active_channel = "NONE" %}
+{% set test_val = "hello" %}
 {% endblock %}
 <html>
 <head>
@@ -14,7 +11,8 @@
     window.tplConf = {
         user : {
             userId : '{{user.userId | safe | default("null", true) }}',
-            now: '{{ tpl_now }}'
+            now: '{{ tpl_now }}',
+            test_val: '{{ test_val }}'
         },
         pageKey : '',
         autoPV : true,
