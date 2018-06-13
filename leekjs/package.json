@@ -1,6 +1,6 @@
 {
   "name": "leekjs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Another Koa based framework for Node.js developer",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "koa-static": "^4.0.3",
     "lodash": "^4.17.10",
     "path-to-regexp": "^2.2.1",
+    "urllib": "^2.28.1",
     "uuid": "^3.2.1"
   }
 }

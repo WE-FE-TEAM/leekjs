@@ -7,7 +7,8 @@
 
 const KoaApplication = require('koa');
 const bunyan = require('bunyan');
-const fse = require('fs-extra')
+const fse = require('fs-extra');
+const urllib = require('urllib');
 
 const LOGGER_SYMBOL = Symbol('leek:koa:app:logger');
 
@@ -38,6 +39,16 @@ class LeekKoaApplication extends KoaApplication{
             this[LOGGER_SYMBOL] = bunyan.createLogger(conf);
         }
         return this[LOGGER_SYMBOL];
+    }
+
+    /**
+     * 发起http请求
+     * 参数文档：https://github.com/node-modules/urllib#method-httprequesturl-options-callback
+     * @param args {any}
+     * @returns {Promise.<*>}
+     */
+    async curl(...args){
+        return urllib.request(...args);
     }
 }
 
