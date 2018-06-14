@@ -9,5 +9,8 @@
 module.exports = [
     {
         package: 'leek-views'
+    },
+    {
+        package: 'leek-mysql'
     }
 ];

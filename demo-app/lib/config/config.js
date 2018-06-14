@@ -101,6 +101,19 @@ config.backend = {
 
 };
 
+config.mysql = {
+
+    connectionLimit: 10,
+    host: '172.16.3.173',
+    user: 'root',
+    password: '123123',
+    database: 'rn_hot_update',
+    charset: 'UTF8_GENERAL_CI',
+    timezone: 'local',
+    connectTimeout: 10000
+
+};
+
 
 module.exports = config;
 
