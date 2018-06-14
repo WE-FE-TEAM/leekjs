@@ -89,7 +89,8 @@ config.backend = {
     //用户服务
     user: {
         host: 'image.baidu.com',
-        port: 80
+        port: 443,
+        // protocol: 'https:'
     },
 
     //账户

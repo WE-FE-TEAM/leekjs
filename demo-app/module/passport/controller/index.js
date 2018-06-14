@@ -44,6 +44,27 @@ class PassportIndexController extends Controller{
             data: data
         };
     }
+
+    async testJsonAction(){
+
+        this.ctx.body = {
+            cookies: this.ctx.req.headers.cookie,
+            query: this.ctx.query
+        };
+    }
+
+    async getLocalAction(){
+        let data = await this.ctx.callService('user.v1.simple.requestLocal', {
+            hello: 'jess',
+            leek: 'NO'
+        });
+
+        this.ctx.body = {
+            status: 0,
+            message: 'ok',
+            data: data
+        };
+    }
 }
 
 module.exports = PassportIndexController;

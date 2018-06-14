@@ -44,11 +44,13 @@ class LeekKoaApplication extends KoaApplication{
     /**
      * 发起http请求
      * 参数文档：https://github.com/node-modules/urllib#method-httprequesturl-options-callback
-     * @param args {any}
+     * @param url {string | object} 请求的URL
+     * @param options {object?} 请求的一些配置参数
+     * @param callback {Function?} 回调
      * @returns {Promise.<*>}
      */
-    async curl(...args){
-        return urllib.request(...args);
+    async curl(url, options, callback){
+        return urllib.request(url, options, callback);
     }
 }
 
