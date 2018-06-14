@@ -183,9 +183,15 @@ class LeekApp {
         }
     }
 
-    run(){
+    async run(){
         this.load();
         this._attachMiddlewareList();
+        //触发服务前的广播
+        try{
+            await this.app.triggerStart();
+        }catch(err){
+            this.app.log.error(`执行 app.triggerStart 出错：`, err);
+        }
         this.app.listen(this.listenPort);
     }
 

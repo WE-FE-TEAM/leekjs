@@ -11,6 +11,7 @@ const fse = require('fs-extra');
 const urllib = require('urllib');
 
 const LOGGER_SYMBOL = Symbol('leek:koa:app:logger');
+const BEFORE_START_FN_LIST = Symbol('leek:koa:app:before-start-fn-list');
 
 
 class LeekKoaApplication extends KoaApplication{
@@ -51,6 +52,38 @@ class LeekKoaApplication extends KoaApplication{
      */
     async curl(url, options, callback){
         return urllib.request(url, options, callback);
+    }
+
+    /**
+     * 注册服务启动前的回调
+     * @param fn {Function} 异步函数，必须是  async 的！！
+     */
+    beforeStart(fn){
+        if( ! this[BEFORE_START_FN_LIST] ){
+            this[BEFORE_START_FN_LIST] = [];
+        }
+        this[BEFORE_START_FN_LIST].push(fn);
+    }
+
+    /**
+     * 同时触发所有的 beforeStart 回调。
+     * 最长只等待 1秒
+     * @returns {Promise.<void>}
+     */
+    async triggerStart(){
+        const list = this[BEFORE_START_FN_LIST] || [];
+        if( list.length < 1 ){
+            return;
+        }
+        const timeoutLimit = new Promise( (resolve, reject) => {
+            setTimeout(resolve, 1000);
+        });
+        const fnArray = list.map( (fn) => {
+            return fn().catch( (err) => {
+                this.log.error(`执行beforeStart回调异常：`, err);
+            });
+        });
+        await Promise.race( [ timeoutLimit, Promise.all(fnArray) ] );
     }
 }
 
