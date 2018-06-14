@@ -1,0 +1,19 @@
+{
+  "name": "leek-mysql",
+  "version": "1.0.0",
+  "description": "mysql adapter for leekjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "leekjs",
+    "leek-mysql"
+  ],
+  "author": "Jess",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^3.1.0",
+    "mysql": "^2.15.0"
+  }
+}
