@@ -43,7 +43,7 @@ config.middlewareOption = {
     leek_session: {
         keys : [ '1qstda', '12avrrr5y'],
         key: 'lsess',
-        prefix: 'leek:sess:'
+        redisPrefix: 'nui:sess:'
     }
 };
 

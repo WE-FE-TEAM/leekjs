@@ -62,6 +62,15 @@ class DBController extends leek.Controller{
         };
     }
 
+    async destroySessionAction(){
+
+        this.ctx.session = null;
+
+        this.ctx.body = {
+            message: 'ok'
+        };
+    }
+
 }
 
 

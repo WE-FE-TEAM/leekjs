@@ -22,7 +22,10 @@ module.exports = {
             signed: true, /** (boolean) signed or not (default true) */
             rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
             renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
-            prefix: ''
+            //这个prefix，cookie里的value和redis里的，是一样的，感觉不是很好，不希望把redis内的key暴露到外部
+            prefix: '',
+            //单独引入一个redis内部的key，让redis里和cookie里，不是完全一样
+            redisPrefix: ''
         }
 
     },

@@ -14,7 +14,11 @@ module.exports = function(app){
 
     assert(app.redis, `app.redis 不存在！leek-session-redis 依赖 leek-redis!`);
 
-    const store = new RedisStore(app.redis);
+    const config = app.getConfig('middlewareOption').leek_session;
+
+    const store = new RedisStore(app.redis, {
+        prefix: config.redisPrefix || ''
+    });
 
     app.sessionStore = store;
 };

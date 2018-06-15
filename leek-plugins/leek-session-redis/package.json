@@ -1,6 +1,6 @@
 {
   "name": "leek-session-redis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "redis store for leek-session",
   "main": "index.js",
   "scripts": {
