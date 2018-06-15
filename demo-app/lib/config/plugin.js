@@ -12,5 +12,9 @@ module.exports = [
     },
     {
         package: 'leek-mysql'
+    },
+    {
+        package: 'leek-redis'
     }
 ];
+

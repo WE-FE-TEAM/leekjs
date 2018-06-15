@@ -22,6 +22,31 @@ class DBController extends leek.Controller{
             data: out
         };
     }
+
+    async redisAction(){
+
+        const { ctx } = this;
+
+        let result = await ctx.app.redis.set('hello', 'leek-redis');
+
+        ctx.body = {
+            status: 0,
+            data: result
+        };
+    }
+
+    async redis2Action(){
+
+        const { ctx } = this;
+
+        let result = await ctx.app.redis.get('hello');
+
+        ctx.body = {
+            status: 0,
+            data: result
+        };
+    }
+
 }
 
 
