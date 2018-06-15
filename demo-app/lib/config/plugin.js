@@ -15,6 +15,12 @@ module.exports = [
     },
     {
         package: 'leek-redis'
+    },
+    {
+        package: 'leek-session'
+    },
+    {
+        package: 'leek-session-redis'
     }
 ];
 

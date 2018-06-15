@@ -24,16 +24,29 @@ config.middleware = [
         options: {
 
         }
+    },
+    {
+        name: 'leek_session'
     }
 ];
 
 //覆盖默认的中间件配置
 config.middlewareOption = {
+
+    //静态资源
     leek_static: {
         '$mountPath': '/ds',
         root: path.normalize(`${leek.appRoot}/static/`)
+    },
+
+    //session
+    leek_session: {
+        keys : [ '1qstda', '12avrrr5y'],
+        key: 'lsess',
+        prefix: 'leek:sess:'
     }
 };
+
 
 //rewrite
 config.rewrite = [

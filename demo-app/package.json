@@ -15,6 +15,8 @@
     "koa-etag": "^3.0.0",
     "leek-mysql": "file:../leek-plugins/leek-mysql",
     "leek-redis": "file:../leek-plugins/leek-redis",
+    "leek-session": "file:../leek-plugins/leek-session",
+    "leek-session-redis": "file:../leek-plugins/leek-session-redis",
     "leek-view-nunjucks": "^1.0.2",
     "leek-views": "file:../leek-plugins/leek-views",
     "leekjs": "0.0.12"

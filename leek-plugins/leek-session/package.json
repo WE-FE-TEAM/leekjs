@@ -1,0 +1,22 @@
+{
+  "name": "leek-session",
+  "version": "1.0.0",
+  "description": "session adapter for leekjs",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "leek-session",
+    "leekjs"
+  ],
+  "author": "Jess",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^3.1.0",
+    "koa-session": "^5.8.1"
+  }
+}

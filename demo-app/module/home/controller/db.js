@@ -47,6 +47,21 @@ class DBController extends leek.Controller{
         };
     }
 
+    async sessionAction(){
+
+        const { ctx } = this;
+
+        let index = ctx.session.index || 0;
+
+        index++;
+
+        ctx.session.index = index;
+
+        ctx.body = {
+            index: index
+        };
+    }
+
 }
 
 
