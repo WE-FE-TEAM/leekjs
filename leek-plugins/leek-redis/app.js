@@ -6,10 +6,13 @@
 'use strict';
 
 const Redis = require('ioredis');
+const debug = require('debug')('leek-redis');
 
 module.exports = function(app){
 
     const config = leek.getConfig('redis');
+
+    debug(`redis配置：%j`, config);
 
     let client = null;
 
