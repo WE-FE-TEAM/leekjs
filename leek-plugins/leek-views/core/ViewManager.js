@@ -58,6 +58,22 @@ class ViewManager {
         assert(engine, `未找到模板对应的渲染引擎[${tplPath}]`);
         return engine;
     }
+
+    /**
+     * 解析出模板最终的文件路径
+     * @param tplPath {string} 模板路径，可能是相对路径，可能不包含后缀
+     * @returns {*|string} 包含后缀的最终模板绝对路径
+     */
+    resolveTemplate(tplPath){
+        let extension = path.extname(tplPath);
+        if( ! extension ){
+            extension = this.defaultExtension;
+            tplPath += extension;
+        }
+        const engine = this.engineMap.get(extension);
+        assert(engine, `未找到模板对应的渲染引擎[${tplPath}]`);
+        return engine.resolveTemplate(tplPath);
+    }
 }
 
 

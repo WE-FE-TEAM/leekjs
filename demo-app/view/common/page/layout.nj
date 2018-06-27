@@ -1,6 +1,7 @@
 <!doctype html>
 {% block block_assign %}
 {% set test_val = "hello" %}
+{% set tpl_now = Date.now() %}
 {% endblock %}
 <html>
 <head>

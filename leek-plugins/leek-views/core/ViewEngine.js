@@ -26,6 +26,15 @@ class ViewEngine{
     async render(tplPath, data){
         throw new Error(`[ViewEngine]子类[${this.constructor.name}]必须实现 async render 方法！`);
     }
+
+    /**
+     * 解析出模板的最终文件绝对路径
+     * @param tplPath {string} 模板相对路径
+     * @returns {string} 模板的绝对路径
+     */
+    resolveTemplate(tplPath){
+        throw new Error(`[ViewEngine]子类必须实现 resolveTemplate 方法！`);
+    }
 }
 
 

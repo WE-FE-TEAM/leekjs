@@ -5,7 +5,9 @@
 
 'use strict';
 
+const path = require('path');
 const nunjucks = require('nunjucks');
+
 
 class LeekViewNunjucks{
 
@@ -34,6 +36,13 @@ class LeekViewNunjucks{
                 resolve(result);
             });
         });
+    }
+
+    resolveTemplate(tplName){
+        if( ! path.isAbsolute(tplName) ){
+            tplName = path.normalize(`${this.options.rootDir}/${tplName}`);
+        }
+        return tplName;
     }
 }
 

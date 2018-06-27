@@ -1,6 +1,6 @@
 {% extends 'common/page/layout.nj' %}
 
-{% set tpl_now = Date.now() %}
+{% set a_tpl_now = Date.now() %}
 
 {% block block_body %}
 
