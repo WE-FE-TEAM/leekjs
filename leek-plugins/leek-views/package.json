@@ -1,6 +1,6 @@
 {
   "name": "leek-views",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "view template manager for leekjs",
   "main": "index.js",
   "directories": {

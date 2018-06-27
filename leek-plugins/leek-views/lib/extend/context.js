@@ -24,7 +24,7 @@ module.exports = {
     /**
      * 渲染模板，并且赋值到body上
      * @param tplName {string}
-     * @param data {object}
+     * @param data {object?}
      * @returns {Promise.<void>}
      */
     async render(tplName, data){
@@ -34,13 +34,23 @@ module.exports = {
     /**
      * 只渲染模板，返回内容，不输出给body
      * @param tplName {string}
-     * @param data {object}
+     * @param data {object?}
      * @returns {Promise.<string>}
      */
     async renderToString(tplName, data){
-        const engine = this.app.viewManager.getViewEngine(tplName);
         this.assign(data);
-        return engine.render(tplName, this.state);
+        return this.rawRenderToString(tplName, this.state);
+    },
+
+    /**
+     * 直接调用视图引擎渲染模板，不会影响ctx
+     * @param tplName {string} 模板路径
+     * @param data {object?} 数据
+     * @returns {Promise.<String>}
+     */
+    async rawRenderToString(tplName, data = {}){
+        const engine = this.app.viewManager.getViewEngine(tplName);
+        return engine.render(tplName, data);
     }
 };
 

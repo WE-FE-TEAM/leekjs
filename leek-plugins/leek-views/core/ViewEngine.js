@@ -20,7 +20,7 @@ class ViewEngine{
     /**
      * 渲染模板文件，返回渲染之后的 string 内容
      * @param tplPath {string} 模板相对路径
-     * @param data {object} 要传给模板的数据
+     * @param data {object?} 要传给模板的数据
      * @returns {Promise.<String>}
      */
     async render(tplPath, data){
