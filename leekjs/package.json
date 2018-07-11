@@ -1,6 +1,6 @@
 {
   "name": "leekjs",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Another Koa based framework for Node.js developer",
   "main": "index.js",
   "scripts": {

@@ -46,7 +46,7 @@ class LeekApp {
         process.on('unhandledRejection', this.unhandledRejection);
         process.on('uncaughtException', this.uncaughtException);
 
-        this.app = new LeekKoaApplication();
+        leek.app = this.app = new LeekKoaApplication();
 
         this.plugin = [];
         //会影响到应用加载流程的配置项
