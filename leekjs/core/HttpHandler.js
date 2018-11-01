@@ -69,6 +69,8 @@ class HttpHandler{
     async runController(){
         const ctx = this.ctx;
         const instance = new ctx.controllerClass(ctx);
+        //调用初始化方法
+        await instance.init();
         const actionName = `${ctx.action}Action`;
         if( typeof instance[actionName] !== 'function' ){
             await ctx.e404();

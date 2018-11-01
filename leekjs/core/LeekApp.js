@@ -32,8 +32,10 @@ class LeekApp {
         leek.frameworkRoot = this.frameworkRoot = path.normalize(`${__dirname}/../`);
         leek.appRoot = this.appRoot = args.appRoot;
         this.listenPort = parseInt(args.port || process.env.port, 10);
-        //默认执行换成是 production
+        //默认执行换成是 production，这个是服务启动环境，一般除了本地，都会采用 production 来启动，nodejs惯例也是采用 这个环境变量
         this.env = process.env.NODE_ENV || 'production';
+        //这个是加载的配置文件对应环境，不同运行环境，加载不同的配置文件
+        this.leekEnv = process.env.LEEK_ENV || this.env;
         //日志的根目录
         this.logRoot = args.logRoot;
         //访问controller的URL前缀
@@ -63,14 +65,14 @@ class LeekApp {
         this.loader = new Loader({
             frameworkRoot: this.frameworkRoot,
             appRoot: this.appRoot,
-            env: this.env,
+            env: this.leekEnv,
             app: this.app,
             leekApp: this
         });
     }
 
     unhandledRejection(reason, p){
-        console.log('[unhandledRejection] at:', p, 'reason:', reason);
+        console.error('[unhandledRejection] at:', p, 'reason:', reason);
         this.exit(1);
     }
 

@@ -12,6 +12,11 @@ class Controller {
     constructor(ctx){
         this.ctx = ctx;
     }
+
+    //提供一个async的初始化方法，允许在具体controller中，执行一些自定义初始化动作
+    async init(){
+
+    }
 }
 
 

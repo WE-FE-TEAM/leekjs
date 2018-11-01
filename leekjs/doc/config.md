@@ -13,3 +13,8 @@
 业务模块配置，只是在运行时，处理http请求过程中，配置各个模块下controller的policy，或者提供一些配置数据，方便在controller中
 使用
 
+## 配置文件加载
+
+`lib/config/config.js`始终会加载，然后会根据 环境变量 `process.env.LEEK_ENV` 来加载对应的配置文件 `lib/config/config.${process.env.LEEK_ENV}.js`，进行
+深度合并之后，得到最终的 config
+
