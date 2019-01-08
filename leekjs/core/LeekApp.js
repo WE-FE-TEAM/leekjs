@@ -49,6 +49,7 @@ class LeekApp {
         process.on('uncaughtException', this.uncaughtException);
 
         leek.app = this.app = new LeekKoaApplication();
+        this.server = null;
 
         this.plugin = [];
         //会影响到应用加载流程的配置项
@@ -185,6 +186,10 @@ class LeekApp {
         }
     }
 
+    /**
+     *
+     * @return {Promise.<net.Server>}
+     */
     async run(){
         this.load();
         this._attachMiddlewareList();
@@ -194,7 +199,9 @@ class LeekApp {
         }catch(err){
             this.app.log.error(`执行 app.triggerStart 出错：`, err);
         }
-        this.app.listen(this.listenPort);
+        const server = this.app.listen(this.listenPort);
+        this.server = server;
+        return server;
     }
 
     exit(code = 0){
